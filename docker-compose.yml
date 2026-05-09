@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: lantern
+      POSTGRES_PASSWORD: lantern
+      POSTGRES_DB: lantern
+
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_URL: postgres://lantern:lantern@db:5432/lantern
+    depends_on:
+        - db
+
+volumes:
+  postgres_data:
