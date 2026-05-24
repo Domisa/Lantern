@@ -1,7 +1,7 @@
 
 use axum::{Router, routing::get};
 use tokio::net::TcpListener;
-
+// Taking a small break to better learn axum before continuing.
 #[tokio::main]
 async fn main() {
     let app = Router::new().route("/", get(|| async {" Lantern is running"}));
