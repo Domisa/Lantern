@@ -14,7 +14,7 @@ async fn get_tasks(
 ) -> impl axum::response::IntoResponse {
 
 }
-// Taking a small break to better learn axum before continuing.
+
 #[tokio::main]
 async fn main() {
 
