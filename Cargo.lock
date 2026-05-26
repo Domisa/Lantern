@@ -783,6 +783,7 @@ dependencies = [
  "axum",
  "chrono",
  "dotenvy",
+ "serde",
  "sqlx",
  "tokio",
  "uuid",
