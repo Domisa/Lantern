@@ -1,6 +1,13 @@
-
+//added extract::path
 use axum::{Router, routing::get, extract::path};
 use tokio::net::TcpListener;
+
+#[derive(Deserialize)]
+struct Task {
+    date: String,
+    task: String,
+    summary: String,
+}
 
 // Taking a small break to better learn axum before continuing.
 #[tokio::main]
