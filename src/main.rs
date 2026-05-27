@@ -1,5 +1,5 @@
 
-use axum::{Router, routing::get, extract::State, Json};
+use axum::{Router, routing::{get, delete}, extract::{State, Path}, Json};
 use tokio::net::TcpListener;
 use serde::{Deserialize, Serialize};
 use sqlx::PgPool;
@@ -47,6 +47,19 @@ async fn create_task(
     axum::http::StatusCode::CREATED
 }
 
+async fn delete_task(
+    State(pool): State<PgPool>,
+    Path(id): Path<i32>,
+) -> impl axum::response::IntoResponse {
+    sqlx::query!("DELETE FROM tasks WHERE id = $1", id)
+        .execute(&pool)
+        .await
+        .unwrap();
+
+    axum::http::StatusCode::OK
+
+}
+
 #[tokio::main]
 async fn main() {
     dotenv::dotenv().ok();
@@ -56,6 +69,7 @@ async fn main() {
 
     let app = Router::new()
         .route("/tasks", get(get_tasks).post(create_task))
+        .route("/tasks/{id}", delete(delete_task))
         .with_state(pool);
 
     let listener = TcpListener::bind("0.0.0.0:8080").await.unwrap();
