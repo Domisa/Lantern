@@ -60,6 +60,25 @@ async fn delete_task(
 
 }
 
+async fn update_task(
+    State(pool): State<PgPool>,
+    Path(id): Path<i32>,
+    Json(payload): Json<CreateTask>
+) -> impl axum::response::IntoResponse {
+    sqlx::query!(
+        "UPDATE tasks SET date = $1, task = $2, summary = $3 WHERE id = $4", 
+        payload.date,
+        payload.task,
+        payload.summary,
+        id
+    )
+    .execute(&pool)
+    .await
+    .unwrap();
+
+    axum::http::StatusCode::OK
+}
+
 #[tokio::main]
 async fn main() {
     dotenv::dotenv().ok();
@@ -69,7 +88,7 @@ async fn main() {
 
     let app = Router::new()
         .route("/tasks", get(get_tasks).post(create_task))
-        .route("/tasks/{id}", delete(delete_task))
+        .route("/tasks/{id}", delete(delete_task).put(update_task))
         .with_state(pool);
 
     let listener = TcpListener::bind("0.0.0.0:8080").await.unwrap();

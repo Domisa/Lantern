@@ -2,6 +2,6 @@
 CREATE TABLE tasks (
     id SERIAL PRIMARY KEY,
     date TEXT NOT NULL,
-    task TEXT NOT NULL,
+    tasks TEXT NOT NULL,
     summary TEXT NOT NULL
 );
