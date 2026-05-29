@@ -1,11 +1,16 @@
+
 # Stage 1: Build
 FROM rust:latest AS builder 
 
+
 WORKDIR /app
+
 
 RUN apt-get update && apt-get install -y gcc && rm -rf /var/lib/apt/lists/*
 
 COPY Cargo.toml Cargo.lock ./
+COPY .sqlx ./.sqlx
+ENV SQLX_OFFLINE=true
 RUN mkdir src && echo "fn main() {}" > src/main.rs
 RUN cargo build --release
 
