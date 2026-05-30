@@ -1,0 +1,23 @@
+name: CI
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+
+        services:
+            postgres:
+                image: postgres:latest
+                env:
+                    POSTGRES_USER: lantern
+                    POSTGRES_PASSWORD: lantern
+                    POSTGRES_DB: lantern
+                ports:
+                    - 5432:5432
+                options:
