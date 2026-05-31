@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lantern
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lantern
+  template:
+    metadata:
+      labels:
+        app: lantern
+    spec:
+      containers:
+        - name: lantern
+          image: docker.io/library/lantern:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: lantern-secret
+                  key: DATABASE_URL

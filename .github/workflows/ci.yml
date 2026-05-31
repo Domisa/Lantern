@@ -15,9 +15,25 @@ jobs:
             postgres:
                 image: postgres:latest
                 env:
-                    POSTGRES_USER: lantern
-                    POSTGRES_PASSWORD: lantern
-                    POSTGRES_DB: lantern
+                    POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+                    POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD}}
+                    POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
                 ports:
                     - 5432:5432
-                options:
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+                
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Install Rust
+              uses: dtolnay/rust-toolchain@stable
+            
+            - name: Build
+              env:
+                DATABASE_URL: ${{ secrets.Database_URL }}
+                SQLX_OFFLINE: true
+              run: cargo build --release
