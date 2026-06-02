@@ -17,10 +17,19 @@ spec:
           image: postgres:latest
           env:
             - name: POSTGRES_USER
-              value: lantern
+              valueFrom:
+                secretKeyRef:
+                  name: lantern-secret
+                  key: POSTGRES_USER
             - name: POSTGRES_PASSWORD
-              value: lantern
+              valueFrom:
+                secretKeyRef:
+                  name: lantern-secret
+                  key: POSTGRES_PASSWORD
             - name: POSTGRES_DB
-              value: lantern
+              valueFrom:
+                secretKeyRef:
+                  name: lantern-secret
+                  key: POSTGRES_DB
           ports:
             - containerPort: 5432
